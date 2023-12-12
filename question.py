@@ -1,6 +1,6 @@
 import pyodbc 
 cnxn = pyodbc.connect("Driver={ODBC Driver 17 for SQL Server};"
-                      "Server=MOHIT\SQLEXPRESS;"
+                      "Server=LALIT\SQLEXPRESS;"
                       "Database=QuestionBank;"
                       "Trusted_Connection=yes;")
 
