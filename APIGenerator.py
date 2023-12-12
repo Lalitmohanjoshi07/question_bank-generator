@@ -10,7 +10,7 @@ def generateQuestion(topic, difficulty='variable'):
     
     messages.append({"role": "system", "content": system_content})
     
-    prompt_text = 'a question bank on '+topic+' with difficulty'+difficulty+' mention difficulty level also'
+    prompt_text = 'Make a question bank on '+topic+' with difficulty'+difficulty'
     
     messages.append({"role": "user", "content": prompt_text})
     
