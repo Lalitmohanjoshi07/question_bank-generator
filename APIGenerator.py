@@ -1,5 +1,5 @@
 import openai
-openai.api_key = "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"
+openai.api_key = "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"
 
 
 def generateQuestion(topic, difficulty='variable'):
