@@ -1,6 +1,6 @@
 import tkinter as tk
-
-def submit(TopicEntry, Diff_Var, output_entry):
+difficulty=''
+def submit(root, submit_button, TopicEntry, Diff_Var, output_entry, Diff_dropdown, TopicLabel, DiffLabel):
     topic = TopicEntry.get()
     difficulty = Diff_Var.get()
 
@@ -10,13 +10,49 @@ def submit(TopicEntry, Diff_Var, output_entry):
         output_entry.insert(tk.END, "Topic field is required!")
         output_entry.config(state=tk.DISABLED)
     else:
+        # deleting current Window elements
+        TopicLabel.grid_forget()
+        TopicEntry.grid_forget()
+        Diff_dropdown.grid_forget()
+        DiffLabel.grid_forget()
+        submit_button.grid_forget()
+
+        # append the topics available in our database in the following list
+        topic_list=['Generate New or Train Data']
+
+        # Adding new window elements
+        TopicLabel_new = tk.Label(root, text="Select Topic :")
+        TopicLabel_new.grid(row=0, column=1, padx=10, pady=10)
+
+        Topic_Var = tk.StringVar()
+        Topic_Var.set("Select topic")  # Default selection
+        Topic_dropdown = tk.OptionMenu(root, Topic_Var, *topic_list)
+        Topic_dropdown.grid(row=0, column=2, padx=10, pady=10)
+
+        
+        # Create submit button
+        Get_button = tk.Button(root, text="get Questions")
+        Get_button.grid(row=2, columnspan=2, padx=10, pady=10)
+        Get_button.config( command= lambda: (getQuestion(Topic_Var.get(), difficulty, output_entry)))
+        
+
+def getQuestion(topic, difficulty, output_entry):
+    res=[]
+    if(topic=="Select topic"):
         output_entry.config(state=tk.NORMAL)
         output_entry.delete(1.0, tk.END)
-        Questions=[]
-        # Todo make API request and get data in array form in Questions array
-        output_entry.insert(tk.END, f"Questions of topic {topic} with {difficulty} difficulty level:\n {Questions}")
+        msg="please select the topic"
+        output_entry.insert(tk.END, msg)
         output_entry.config(state=tk.DISABLED)
+    else:
+        print(topic, difficulty)
+        res.append('hello')
+        # Todo: add questions from database or find it from API
 
+        # if(topic=='Generate New or Train Data'):
+        #     # print('fetch data from API')
+        # else:
+        #     # print('fetch from database')
 
 def main():
     # Create the main window
@@ -49,7 +85,7 @@ def main():
     output_entry.grid(row=3, column=2, columnspan=5, padx=10, pady=10)
 
     # Create submit button
-    submit_button = tk.Button(root, text="Submit", command= lambda: (submit(TopicEntry, Diff_Var, output_entry)))
+    submit_button = tk.Button(root, text="Submit", command= lambda: (submit(root, submit_button, TopicEntry, Diff_Var, output_entry, Diff_dropdown, TopicLabel, DiffLabel)))
     submit_button.grid(row=2, columnspan=2, padx=10, pady=10)
 
     # Run the main loop

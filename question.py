@@ -1,13 +1,14 @@
 import pyodbc 
 import openai
 import config
+import re
 import time
 
-openai.api_key = "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"
+openai.api_key = "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"
 print(f'openai.api_key : {openai.api_key}')
 
 cnxn = pyodbc.connect("Driver={ODBC Driver 17 for SQL Server};"
-                      "Server=MOHIT\SQLEXPRESS;"
+                      "Server=LALIT\ADBMS;"
                       "Database=QuestionBank;"
                       "Trusted_Connection=yes;")
 
@@ -57,14 +58,17 @@ def train(topic):
     
     for i in range(0,3):
         for j in range(0,3):
-            query = 'generate a Questions bank on'+topic+' of difficulty '+dif[i]+'without answer and put #@# in the end of every question'
+            query = 'generate a Questions bank on'+topic+' of difficulty '+dif[i]+'without answer'
             try:
                 response = openAIQuery(query)
                 li=[]
-                li=response.split('\#@#');
+                pattern = r'\b\d+\..*?(?=\b\d+\.|$)'
+                questions = re.findall(pattern,response, re.DOTALL)
+                questions = [q.strip() for q in questions if q.strip()]
+                for k in questions:
+                    li.append(k)
                 put(li,topic,i+1)
                 time.sleep(15)
-                print(f'Response : {response}')
                 print(li)
             except Exception as e:
                 print(f'Exception : {str(e)}')
@@ -89,56 +93,3 @@ if row is not None:
 
 else:
     print("No data fetched.")  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
