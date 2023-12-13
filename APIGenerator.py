@@ -1,30 +1,39 @@
 import openai
-openai.api_key = "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"
+import config
+
+openai.api_key = "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"
+print(f'openai.api_key :', {openai.api_key})
 
 
-def generateQuestion(topic, difficulty='variable'):
-    messages = []
-    
-    # be as specific as possible in the behavior it should have
-    system_content = '''you are a university teacher from technical field'''
-    
-    messages.append({"role": "system", "content": system_content})
-    
-    prompt_text = 'a question bank on '+topic+' with difficulty'+difficulty+' mention difficulty level also'
-    
-    messages.append({"role": "user", "content": prompt_text})
-    
-    response = openai.ChatCompletion.create(
-                            model="gpt-3.5-turbo",
-                            messages=messages,
-                            max_tokens=1000,
-                            temperature=0.5)
-    return (response.choices[0].message.content)
+def openAIQuery(query):
+    response = openai.Completion.create(
+      engine="davinci-instruct-beta-v3",
+      prompt=query,
+      temperature=0.8,
+      max_tokens=1000,
+      top_p=1,
+      frequency_penalty=0,
+      presence_penalty=0)
 
-# topic-name and difficulty
-topic= input('enter topic name: ')
-difficulty= input('enter difficulty: ')
+    if 'choices' in response:
+        if len(response.choices) > 0:
+            answer = response.choices[0].text
+        else:
+            answer = 'Opps sorry, you beat the AI this time'
+    else:
+        answer = 'Opps sorry, you beat the AI this time'
 
-#calling the function to generate 
-res= generateQuestion(topic, difficulty)
-print(res)
+    return answer
+
+
+if __name__ == '__main__':
+    if not openai.api_key:
+        print(f'api_key is not set')
+        exit(0)
+        
+    query = 'generate a Java Programming Questions bank of 20 question of hard level difficulty'
+    try:
+        response = openAIQuery(query)
+        print(f'Response : {response}')
+    except Exception as e:
+        print(f'Exception : {str(e)}')
