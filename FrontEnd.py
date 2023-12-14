@@ -6,7 +6,7 @@ import time
 import re
 import threading
 
-openai.api_key = ""
+openai.api_key = "Enter your api key"
 print(f'openai.api_key : {openai.api_key}')
 
 cnxn = pyodbc.connect("Driver={ODBC Driver 17 for SQL Server};"
