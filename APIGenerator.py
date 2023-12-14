@@ -1,7 +1,7 @@
 import openai
 import config
 
-openai.api_key = "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"
+openai.api_key = "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"
 print(f'openai.api_key :', {openai.api_key})
 
 
@@ -17,7 +17,7 @@ def openAIQuery(query):
 
     if 'choices' in response:
         if len(response.choices) > 0:
-            answer = response.choices[0].text
+            answer = response.choices[0]
         else:
             answer = 'Opps sorry, you beat the AI this time'
     else:
@@ -31,7 +31,7 @@ if __name__ == '__main__':
         print(f'api_key is not set')
         exit(0)
         
-    query = 'generate a Java Programming Questions bank of 20 question of hard level difficulty'
+    query = 'generate a Java Programming Questions bank of 20 question of hard level difficulty and add a "@#" after end of each question'
     try:
         response = openAIQuery(query)
         print(f'Response : {response}')
