@@ -2,8 +2,9 @@ import pyodbc
 import openai
 import config
 import time
+import re
 
-openai.api_key = "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"
+openai.api_key = "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"
 print(f'openai.api_key : {openai.api_key}')
 
 cnxn = pyodbc.connect("Driver={ODBC Driver 17 for SQL Server};"
@@ -57,19 +58,20 @@ def train(topic):
     
     for i in range(0,3):
         for j in range(0,3):
-            query = 'generate a Questions bank on'+topic+' of difficulty '+dif[i]+'without answer and put #@# in the end of every question'
+            query = 'generate a Questions bank on'+topic+' of difficulty '+dif[i]+'without answer'
             try:
                 response = openAIQuery(query)
                 li=[]
-                li=response.split('\#@#');
+                pattern = r'\b\d+\..*?(?=\b\d+\.|$)'
+                questions = re.findall(pattern,response, re.DOTALL)
+                for i in questions:
+                    li.append(i)
                 put(li,topic,i+1)
                 time.sleep(15)
                 print(f'Response : {response}')
                 print(li)
             except Exception as e:
                 print(f'Exception : {str(e)}')
-
-
 
 
 
